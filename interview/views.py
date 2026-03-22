@@ -144,6 +144,9 @@ def start_interview(request):
             'max_questions': result.get('max_questions', 8)
         })
     except Exception as e:
+        import traceback
+        with open("server_error.txt", "w") as f:
+            f.write(traceback.format_exc())
         return Response({'error': str(e)}, status=500)
     
 @api_view(['POST'])
