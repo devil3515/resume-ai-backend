@@ -32,7 +32,7 @@ load_dotenv()
 logger = logging.getLogger(__name__) 
 
 # Initialize the language model to be used for memory extraction
-MODEL_NAME = os.environ.get("LLM_MODEL", "groq/llama3-8b-8192")
+MODEL_NAME = os.environ.get("LLM_MODEL", "groq/llama-3.3-70b-versatile")
 if "/" in MODEL_NAME:
     provider, model = MODEL_NAME.split("/", 1)
     extra = {}
@@ -68,13 +68,7 @@ async def start_interview(state: State) -> dict:
         interview_duration=state.interview_duration,
     )
 
-    from channels.layers import get_channel_layer
-    channel_layer = get_channel_layer()
-    interview_id = state.interview_id
 
-    await channel_layer.group_send(
-        f"interview_{interview_id}", {"type": "interview.message", "message": greetings}
-    )
 
     return {
         "messages": [{"role": "assistant", "content": greetings}],
@@ -88,7 +82,7 @@ async def start_interview(state: State) -> dict:
         "experience_level": state.experience_level,
         "interview_duration": state.interview_duration,
         "voice_analysis_enabled": state.voice_analysis_enabled,
-        "interview_id": interview_id,
+        "interview_id": state.interview_id,
     }
 
 async def ask_question(state: State) -> dict:
@@ -105,13 +99,7 @@ async def ask_question(state: State) -> dict:
     response = await llm.ainvoke([{"role": "system", "content": prompt}])
     question = response.content
 
-    from channels.layers import get_channel_layer
-    channel_layer = get_channel_layer()
-    interview_id = state.interview_id
 
-    await channel_layer.group_send(
-        f"interview_{interview_id}", {"type": "interview.message", "message": question}
-    )
 
     return {
         "messages": [{"role": "assistant", "content": question}],
@@ -164,18 +152,7 @@ async def evaluate_answer(state: State) -> dict:
     #prepare response
     response_content = f"Feedback: {feedback}"
 
-    # Broadcast feedback immediately to the client over WS
-    try:
-        from channels.layers import get_channel_layer
-        channel_layer = get_channel_layer()
-        interview_id = state.interview_id
-        # Fire-and-forget broadcast; ignore if channel layer not available
-        await channel_layer.group_send(
-            f"interview_{interview_id}",
-            {"type": "interview.message", "message": response_content},
-        )
-    except Exception:
-        pass
+
 
     result: dict = {
         
@@ -199,13 +176,7 @@ async def follow_up(state: State) -> dict:
     """Ask a follow-up question when needed to keep a human-like flow."""
     question = state.current_question or "Could you elaborate a bit more on your previous answer?"
 
-    from channels.layers import get_channel_layer
-    channel_layer = get_channel_layer()
-    interview_id = state.interview_id
 
-    await channel_layer.group_send(
-        f"interview_{interview_id}", {"type": "interview.message", "message": question}
-    )
 
     return {
         "messages": [{"role": "assistant", "content": question}],

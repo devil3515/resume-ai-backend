@@ -1,0 +1,52 @@
+Traceback (most recent call last):
+  File "D:\Project\Resume parser project\Try2\resume-ai-backend\interview\views.py", line 128, in start_interview
+    result = loop.run_until_complete(interview_system.start_interview(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "D:\Project\Resume parser project\Try2\resume-ai-backend\interview\views.py", line 65, in start_interview
+    result = await self.app.ainvoke(initial_state, config=config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langgraph\pregel\main.py", line 3462, in ainvoke
+    async for chunk in self.astream(
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langgraph\pregel\main.py", line 3111, in astream
+    async for _ in runner.atick(
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langgraph\pregel\_runner.py", line 304, in atick
+    await arun_with_retry(
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langgraph\pregel\_retry.py", line 211, in arun_with_retry
+    return await task.proc.ainvoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langgraph\_internal\_runnable.py", line 705, in ainvoke
+    input = await asyncio.create_task(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langgraph\_internal\_runnable.py", line 473, in ainvoke
+    ret = await self.afunc(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project\Resume parser project\Try2\resume-ai-backend\interview\agent\graph.py", line 107, in ask_question
+    response = await llm.ainvoke([{"role": "system", "content": prompt}])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1160, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1118, in agenerate
+    raise exceptions[0]
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1387, in _agenerate_with_cache
+    result = await self._agenerate(
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\langchain_groq\chat_models.py", line 642, in _agenerate
+    response = await self.async_client.create(messages=message_dicts, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhik\anaconda3\envs\resume-parser\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.BadRequestError: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+During task with name 'ask_question' and id '96c512d9-3bdb-999c-c8f1-1f38c4680b5f'

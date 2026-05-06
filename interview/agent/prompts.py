@@ -65,16 +65,21 @@ FOLLOW_UP_QUESTION: [follow-up question if needed, else leave empty]
 """
 
 FOLLOW_UP_PROMPT = """
-Based on the candidate's previous answer: "{user_response}", ask a single, concise follow-up question to dig deeper into their knowledge or experience.
+Based on the candidate's previous answer: "{user_response}", ask a natural, conversational follow-up question to dig deeper into their knowledge or experience.
 
 Job Description Context:
 {job_description}
 
-IMPORTANT: Output ONLY the follow-up question text. Do not include any explanation, preface, numbering, or extra prose.
+Requirements:
+1. Be conversational and friendly like a real human interviewer.
+2. Acknowledge what they just said briefly to show you are listening.
+3. Ask the follow-up question to clarify or dive deeper into their previous point.
+
+IMPORTANT: Speak directly to the candidate. Output ONLY your exact spoken words. Do not use prefixes like 'Interviewer:' or 'Question:'.
 """
 
 NEXT_QUESTION_PROMPT = """
-Based on the conversation history and the {interview_type} interview for {job_title} at {company}, generate the next appropriate interview question.
+Based on the conversation history and the {interview_type} interview for {job_title} at {company}, generate the next appropriate interview response.
 
 Job Description:
 {job_description}
@@ -84,13 +89,13 @@ The candidate has {experience_level} experience level.
 Conversation history:
 {conversation_history}
 
-Requirements for the next question:
-- Relevant to the job title and job description
-- Matches the interview type and experience level
-- Builds upon previous questions but doesn't repeat them
-- Helps assess the candidate's suitability for the position
+Requirements for the next response:
+1. Act naturally and conversationally like a real human interviewer.
+2. FIRST, briefly acknowledge the candidate's last answer in a natural way (e.g., "That makes sense", "That's okay if you haven't used it much", "Great example!").
+3. THEN, seamlessly transition into asking the next relevant question.
+4. The question should build upon previous context without repeating, and match the {experience_level} difficulty level.
 
-IMPORTANT: Output ONLY the question text. Do not include any explanation, preface like "Here's a question:", bullet points, or analysis.
+IMPORTANT: Speak directly to the candidate. Output ONLY your exact spoken words. Do not use prefixes like 'Interviewer:' or 'Feedback:'.
 """
 
 CLOSING_PROMPT = """
